@@ -116,13 +116,19 @@ func (ui *UI) handleInfoPageEvents(key *tcell.EventKey) *tcell.EventKey {
 // handle ctrl+z job control
 func (ui *UI) handleCtrlZ(key *tcell.EventKey) *tcell.EventKey {
 	if key.Key() == tcell.KeyCtrlZ {
-		ui.app.Suspend(func() {
-			termApp := ui.app.(*tview.Application)
-			termApp.Lock()
-			defer termApp.Unlock()
 
+		termApp := ui.app.(*tview.Application)
+		termApp.Lock()
+		defer termApp.Unlock()
+
+		s := ui.screen
+		if err := s.Suspend(); err == nil {
 			syscall.Kill(syscall.Getpid(), syscall.SIGTSTP)
-		})
+
+			if err := s.Resume(); err != nil {
+				panic("failed to resume: " + err.Error())
+			}
+		}
 		return nil
 	}
 
