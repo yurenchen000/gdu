@@ -27,7 +27,9 @@ func (ui *UI) spawnShell() {
 			return
 		}
 
-		if err := ui.exec(getShellBin(), nil, os.Environ()); err != nil {
+		// if err := ui.exec(getShellBin(), nil, os.Environ()); err != nil {
+		argv := []string{"--init-file", "~/.gdu_bashrc"}
+		if err := ui.exec(getShellBin(), argv, os.Environ()); err != nil {
 			ui.showErr("Error executing shell", err)
 		}
 	})
