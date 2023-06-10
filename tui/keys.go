@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/dundee/gdu/v5/pkg/fs"
 	"github.com/gdamore/tcell/v2"
@@ -124,6 +125,8 @@ func (ui *UI) handleCtrlZ(key *tcell.EventKey) *tcell.EventKey {
 			if err != nil {
 				ui.showErr("Error sending STOP signal", err)
 			}
+			// TODO: find the root cause
+			time.Sleep(1 * time.Millisecond)
 		})
 		return nil
 	}
